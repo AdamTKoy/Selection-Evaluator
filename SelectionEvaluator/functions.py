@@ -26,8 +26,7 @@ while again:
 
             net_pos_models = model_eval.model_rewrite(W, N)
             
-            result_string = ", ".join(net_pos_models)
-            print("Net Positive Models: ", result_string)
+            print("Net Positive Models: ", net_pos_models)
         case "2":
             W = input("Gross Positive Features -> W/: ")
             N = input("Negative Features -> N/: ")
@@ -35,8 +34,7 @@ while again:
             
             net_pos_features = feature_eval.feature_rewrite(W, N, M)
             
-            result_string = ", ".join(net_pos_features)
-            print("Net Positive Features: ", result_string)
+            print("Net Positive Features: ", net_pos_features)
         case "3":
             group1 = input("Grouping 1: ")
             group2 = input("Grouping 2: ")

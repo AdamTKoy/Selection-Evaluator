@@ -7,7 +7,7 @@ import validate
 
 # Function that will determine feature overlap between two GROUPINGS of synonyms/features
 def syn_compare(syn1, syn2, models_input):
-    data_refresh() # refresh Hadoop data if source data files are older than today (otherwise does nothing)
+    data_refresh.check() # refresh Hadoop data if source data files are older than today (otherwise does nothing)
     
     syn1 = syn1.upper()
     syn2 = syn2.upper()
@@ -27,24 +27,24 @@ def syn_compare(syn1, syn2, models_input):
     unique_mdls = set(mmac_df['model'])
     unique_mdl_syns = set(mdf['synonym'])
 
-    if not validate(mdl_validation_set, unique_mdls, unique_mdl_syns):
-        return ['Model input failed validation'], ['Model input failed validation']
+    if not validate.validate(mdl_validation_set, unique_mdls, unique_mdl_syns):
+        return 'Model input failed validation', 'N/A'
 
     unique_ftrs = set(mmac_df['feature'])
     unique_ftr_syns = set(fdf['synonym'])
-    if not validate(validation_set, unique_ftrs, unique_ftr_syns):
-        return ['Feature input failed validation'], ['Feature input failed validation']
+    if not validate.validate(validation_set, unique_ftrs, unique_ftr_syns):
+        return 'Feature input failed validation', 'N/A'
 
     fdf['members'] = fdf['members'].astype(str).apply(lambda x: [item.strip() for item in x.split(',') if item.strip()] if x else [])
     mdf['members'] = mdf['members'].astype(str).apply(lambda x: [item.strip() for item in x.split(',') if item.strip()] if x else [])
 
-    syn1_set = build_set(syn1_items, fdf)
-    syn2_set = build_set(syn2_items, fdf)
+    syn1_set = build_set.build(syn1_items, fdf)
+    syn2_set = build_set.build(syn2_items, fdf)
 
     in_both = syn1_set.intersection(syn2_set)
     removed = syn1_set.symmetric_difference(syn2_set)
 
-    models = build_set(model_items, mdf)
+    models = build_set.build(model_items, mdf)
 
     fgs = set()
 
@@ -62,13 +62,16 @@ def syn_compare(syn1, syn2, models_input):
 
     if inBoth_filter.empty:
         print("No overlapping features detected. Group 1 and Group 2 are distinct.")
-        return [],[removed]
+        removed_list = list(removed)
+        sorted_removed = sorted(removed_list)
+        removed_string = ", ".join(sorted_removed)
+        return [],[removed_string]
 
     fgs.update(inBoth_filter['fg'].tolist())
 
     # TODO: Expand for processing of multiple FGs
     if len(fgs) != 1:
-        return ['Multiple FGs detected.'], ['Multiple FGs detected.']
+        return ['Multiple FGs detected.'], ['Unable to produce results.']
 
     fg = fgs.pop()
     

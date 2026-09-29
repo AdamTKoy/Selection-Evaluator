@@ -50,7 +50,7 @@ def feature_rewrite(with_features, not_with_features, model_string):
     mdl_validation_set = set(model_items)
     unique_mdl_syns = set(mdf['synonym'])
     if not validate.validate(mdl_validation_set, unique_mdls, unique_mdl_syns):
-        return ['Model input failed validation'], 'Model input failed validation'
+        return 'Model input failed validation'
     
     # split synonym member single-strings into lists of individual features
     fdf['members'] = fdf['members'].astype(str).apply(lambda x: [item.strip() for item in x.split(',') if item.strip()] if x else [])
@@ -66,7 +66,7 @@ def feature_rewrite(with_features, not_with_features, model_string):
         all_fgs = set(mmac_df['fg'])
 
         if not validate.validate(fg_validation_set, all_fgs):
-            return ['FG input failed validation'], 'FG input failed validation'
+            return 'FG input failed validation'
         else:
             all_compat_in_fg = mmac_df[(mmac_df['model'].isin(models)) & (mmac_df['fg'] == with_features)]
             # populate with_items with a list of strings for all compatible features
@@ -81,7 +81,7 @@ def feature_rewrite(with_features, not_with_features, model_string):
     unique_ftrs = set(mmac_df['feature'])
     unique_ftr_syns = set(fdf['synonym'])
     if not validate.validate(ftr_validation_set, unique_ftrs, unique_ftr_syns):
-        return ['Feature input failed validation'], 'Feature input failed validation'
+        return 'Feature input failed validation'
     
     # go through all synonym members and remove features not present in all active features
     fdf['members'] = fdf['members'].apply(lambda item_list: [item for item in item_list if item in unique_ftrs])
@@ -93,7 +93,7 @@ def feature_rewrite(with_features, not_with_features, model_string):
 
     # check if there's nothing to analyze/return
     if not net_positive:
-        return ['No remaining features identified'], 'No remaining features identified'
+        return 'No remaining features identified'
 
     # check that all features belong to same FG
     fgs = set()
@@ -102,9 +102,9 @@ def feature_rewrite(with_features, not_with_features, model_string):
     fgs.update(fg_filter['fg'].tolist())
 
     if len(fgs) > 1:
-        return ['Error: Multiple feature groups detected'], 'Error: Multiple feature groups detected'
+        return 'Error: Multiple feature groups detected'
     elif len(fgs) < 1:
-        return ['Error: No matching feature group identified for input.'], 'Error: No matching feature group identified for input.'
+        return 'Error: No matching feature group identified for input.'
 
     fg = fgs.pop()
 
@@ -120,7 +120,7 @@ def feature_rewrite(with_features, not_with_features, model_string):
 
     # check if there's nothing to analyze/return after removing excluded features
     if not net_positive:
-        return ['No remaining features identified'], 'No remaining features identified'
+        return 'No remaining features identified'
 
     # we only want synonyms that have at least 1 member from net_positive
     # and do NOT contain any other FG features compatible with models but restricted by inputs
@@ -133,7 +133,7 @@ def feature_rewrite(with_features, not_with_features, model_string):
         net_pos_list = list(net_positive)
         sorted_net_pos = sorted(net_pos_list)
         result_string = ", ".join(sorted_net_pos)
-        return sorted_net_pos, result_string
+        return result_string
 
     # adding calculation for # of feature overlap with net_positive (for ranking)
     filtered_df['values'] = filtered_df.apply(lambda row: len(set(row['members']).intersection(net_positive)), axis=1)
@@ -167,7 +167,8 @@ def feature_rewrite(with_features, not_with_features, model_string):
 
     net_pos_list = list(net_positive)
     sorted_net_pos = sorted(net_pos_list)
+    result_string = ", ".join(sorted_net_pos)
 
     print("Query took %s seconds to run. Sending back final result..." % (time.time() - func_time))
 
-    return sorted_net_pos
+    return result_string

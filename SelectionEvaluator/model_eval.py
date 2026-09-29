@@ -35,7 +35,7 @@ def model_rewrite(with_string, not_with_string):
 
     validation_set = set(with_items + not_with_items)
     if not validate.validate(validation_set, unique_mdls, unique_mdl_syns):
-        return ['Input failed validation'], 'Input failed validation'
+        return 'Input failed validation'
 
     # splits string into list of models that are members of respective synonyms
     mdf['members'] = mdf['members'].apply(lambda x: [item.strip() for item in x.split(',') if item.strip()] if x else [])
@@ -64,5 +64,6 @@ def model_rewrite(with_string, not_with_string):
 
     net_pos_list = list(net_positive)
     sorted_net_pos = sorted(net_pos_list)
+    result_string = ", ".join(sorted_net_pos)
     
-    return sorted_net_pos
+    return result_string
