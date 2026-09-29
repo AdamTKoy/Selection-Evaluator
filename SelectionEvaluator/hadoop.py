@@ -1,4 +1,4 @@
-# DISABLED SINCE LOCAL COPY NOT CONNECTED TO DATABASE
+# This should no longer run since 'today' is hard-coded to be date of last run (5/4/26)
 import pandas as pd
 import pyodbc
 import os
