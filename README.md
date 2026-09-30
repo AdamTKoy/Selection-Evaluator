@@ -1,6 +1,6 @@
 # Selection Rule Evaluator
 
-This tool automates analysis of subtracting specified features or models from a provided gross positive to generate the net positive set of models or features. The primary motivation for creating this tool was to eliminate hours of manual research to determine the net positive result when provided with gross positive and negative terms/tokens. Most feature queries (which are the most complex of the 3 evaluations) process in less than 1 second. When fresh data needs to be pulled from the database, roughly 5-10 seconds is added.
+This tool automates analysis of subtracting specified features or models from a provided gross positive to generate the net positive set of models or features. The primary motivation for creating this tool was to eliminate hours of manual research spread across multiple internal systems. Most feature queries (which are the most complex of the 3 evaluations) process in less than 1 second. When fresh data needs to be pulled from the database, roughly 5-10 seconds is added.
 
 For feature evaluations, the net positive also evaluates against model/market compatibility records. Note: the net positive result may contain synonyms with member features that are not compatible with the specified models. These incompatibilities are checked via another process in the order coding system, so what we care about here is making sure that the net positive result does not add any compatible features that should not be there or miss any compatible features that should be there.
 
