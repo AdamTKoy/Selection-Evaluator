@@ -24,6 +24,8 @@ Unique 7-character identifiers that correspond to vehicle families (ex: HV50700)
 
 These are terms used to group similar features or models. Feature synonyms begin with 'F-' and model synonyms begin with 'M-'.
 
+### Automatic Data Refresh
+
 The tool was designed to automatically pull fresh data via a SQL query to the company's internal Hadoop database whenever the last-pull date was older than today. Since I no longer have access after leaving the company, today's date has been fixed as 2026-05-04. Please note that manually changing the 'last_run.txt' file that stores the last-run date will cause the data refresh to fail.
 
 ## Examples
