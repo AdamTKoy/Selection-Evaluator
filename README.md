@@ -1,23 +1,33 @@
 # Selection Rule Evaluator
 
-This tool accepts either features (such as fuel tanks, wheels, brakes, etc.) or models (such as heavy duty trucks) or 'synonyms' (terms used to group similar features or models) used as positive (W/) and/or negative (N/) tokens in logic configurations used to match orders with necessary parts. The tool will then evaluate the net positive result while also checking features against Model Market Application Compatibility records so that only relevant results are provided.
+This tool automates analysis of subtracting specified features or models from a provided gross positive to generate the net positive set of models or features. The primary motivation for creating this tool was to eliminate hours of manual research to determine the net positive result when provided with gross positive and negative terms/tokens. Most feature queries (which are the most complex of the 3 evaluations) process in less than 1 second. When fresh data needs to be pulled from the database, roughly 5-10 seconds is added.
 
-Here are a few quick examples:
+For feature evaluations, the net positive also evaluates against model/market compatibility records. Note: the net positive result may contain synonyms with member features that are not compatible with the specified models. These incompatibilities are checked via another process in the order coding system, so what we care about here is making sure that the net positive result does not add any compatible features that should not be there or miss any compatible features that should be there.
 
-## Net Positive Features
+There are 3 types of evaluation:
 
-The primary motiviation for creating this tool was to eliminate the hours of manual research involved to determine the net positive result when provided with gross positive and negative tokens. Here is an example for rear axle codes that reduces 1 gross positive token and 14 negative tokens (including a mix of individual feature codes and a synonym) into a net positive of just 4 tokens (2 features and 2 synonyms)...and in less than 1 second!
+- Model
+- Feature
+- Term/Token Comparison
 
-<img width="100%" alt="L040081553 04 00 - 14AA Eval" src="https://github.com/user-attachments/assets/84da1ab8-8ed8-4038-8d2f-b7a8094b00b1" />
+For Model and Feature evaluations, the tool prompts for gross positive (W/) and negative (N/) inputs. Negative inputs are optional and are typically omitted only to check if a simplification of terms is available (for example, can multiple sub-terms be consolidated into a larger term).
 
-## Net Positive Models
+For Feature evaluations, the tool also prompts for models. This is a required field and is used to determine compatibility of resulting net positive features. The results from feature evaluations are also exported to an Excel file that contains a sheet for the net positive result as well as a sheet with the original query. Each file name is intended to be unique by setting the filename with the date and time.
 
-The M-CE synonym refers to a particular type of bus. The rule in question was requiring CE bus but restricting the electric models, M-CE-ELECTRIC. The tool was able to match the remaining non-electric models with the M-CE-N/ELECTRIC synonym.
+The Term/Token Comparison evaluation prompts for 2 groupings of feature codes plus models and then will specify (1) which terms are present in both groups and compatible with specified models and (2) which terms were not present in both groups and/or not compatible with specified models.
 
-<img width="100%" alt="SA14098732 13 00 - Model Eval" src="https://github.com/user-attachments/assets/5c9b043d-f27a-4885-8c07-9de75a6f1302" />
+### Feature Codes
 
-## Simplification
+Unique 7-character identifiers that loosely correspond to physical parts on a vehicle, such as fuel tanks, wheels, brakes, etc. or models (such as heavy duty trucks).
 
-If the goal is only to check for possible simplification of required individual features into synonyms, the N/ condition may be left blank. This example also demonstrates how the tool will automatically re-run the SQL query to the database (via Hadoop) on a once-daily basis.
+### Synonyms
 
-<img width="100%" alt="SR14062032_04_00_Evaluation" src="https://github.com/user-attachments/assets/dbc68bff-735c-4124-aaf4-812988e90298" />
+These are terms used to group similar features or models. Feature synonyms begin with 'F-' and model synonyms begin with 'M-'.
+
+The tool was designed to automatically pull fresh data via a SQL query to the company's internal Hadoop database whenever the last-pull date was older than today. Since I no longer have access after leaving the company, today's date has been fixed as 2026-05-04. Please note that manually changing the 'last_run.txt' file that stores the last-run date will cause the data refresh to fail.
+
+## Examples
+
+Here is a simple example that demonstrates all 3 evaluation types. The program is designed to allow multiple different evaluations until the user stops the program by entering '4'.
+
+<img width="100%" alt="examples" src="screenshots/demo.png" />
