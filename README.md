@@ -16,9 +16,9 @@ For Feature evaluations, the tool also prompts for models. This is a required fi
 
 The Term/Token Comparison evaluation prompts for 2 groupings of feature codes plus models and then will specify (1) which terms are present in both groups and compatible with specified models and (2) which terms were not present in both groups and/or not compatible with specified models.
 
-### Feature Codes
+### Model and Feature Codes
 
-Unique 7-character identifiers that loosely correspond to physical parts on a vehicle, such as fuel tanks, wheels, brakes, etc. or models (such as heavy duty trucks).
+Unique 7-character identifiers that correspond to vehicle families (ex: HV50700) or to physical parts on a vehicle, such as fuel tanks (ex: 0012ELT), brakes (ex: 0004092), etc.
 
 ### Synonyms
 
@@ -30,4 +30,4 @@ The tool was designed to automatically pull fresh data via a SQL query to the co
 
 Here is a simple example that demonstrates all 3 evaluation types. The program is designed to allow multiple different evaluations until the user stops the program by entering '4'.
 
-<img width="100%" alt="examples" src="screenshots/demo.png" />
+<img width="100%" alt="examples" src="screenshots/demo2.png" />

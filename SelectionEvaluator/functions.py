@@ -10,14 +10,13 @@ import synonym_compare
 print("""This program automates evaluation for the following:
     1: Net Positive Models
     2: Net Positive Features
-    3: Token Comparison (may be features or models)
+    3: Feature Comparison (codes and/or synonyms)
       """)
 
 again = 1
 
 while again:
-    print("Please select an evaluation type (1, 2 or 3) or 4 to quit:")
-    eval_select = input()
+    eval_select = input("Please select an evaluation type (1, 2 or 3) or 4 to quit: ")
     match eval_select:
         case "1":
             W = input("Gross Positive Models -> W/: ")
